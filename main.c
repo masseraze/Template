@@ -19,7 +19,11 @@ static const struct _opt option_spec[] = {
 const int size_of_option_spec = sizeof(option_spec) / sizeof(option_spec[0]);
 
 static void show_help(const char *progname){
-    fprintf(stderr,"[%s,%d]\n",__func__,__LINE__);
+    printf("usage: %s [options] \n\n", progname);
+	printf("External customized options:\n"
+	       "    --data=<s>             data name \n"
+	       "    --path=<s>             path \n"
+	       "\n");
 }
 
 int main(int argc,char *argv[]){
@@ -30,6 +34,6 @@ int main(int argc,char *argv[]){
     if (options.show_help) {
 		show_help(argv[0]);
     }
-    printf("option data %s path %s\n",options.data,options.path);
+    printf("external option: data %s path %s\n",options.data,options.path);
     return ret;
 }

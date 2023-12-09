@@ -12,6 +12,10 @@ struct _args{
 	char **argv;
 };
 
+struct hint_s {
+	const char *arg;
+	const char *str;
+};
 /**
  * Initializer for 'struct _args'
  */
@@ -29,16 +33,10 @@ struct _opt {
 	 */
 	unsigned long offset;
 };
-/**
- * Last option.	 An array of 'struct _opt' must end with a NULL
- * template value
- */
-#define _OPT_END { NULL, 0}
-
 
 /******************Internal OPTIONS*********************/
 static int option_index = 0;
-static const char *short_options = "f:F";
+static const char *short_options = "f:F"; // add needed option here
 /*!
  * @brief `-f --filename` [?]:  filename to store output 
  */
@@ -54,6 +52,11 @@ static struct option long_options[] = {
 	FILENAME_OPTION
 	FORMAT_OPTION
 	{0, 0, 0, 0}
+};
+
+static const struct hint_s hint[] = {
+	{"<filename>", "file to store"},
+	{"", "format"}
 };
 
 
