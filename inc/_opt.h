@@ -34,6 +34,12 @@ struct _opt {
 	unsigned long offset;
 };
 
+/**
+ * Last option.	 An array of 'struct _opt' must end with a NULL
+ * template value
+ */
+#define _OPT_END { NULL, 0}
+
 /******************Internal OPTIONS*********************/
 static int option_index = 0;
 static const char *short_options = "f:F"; // add needed option here
@@ -62,6 +68,6 @@ static const struct hint_s hint[] = {
 
 
 int _opt_parse(struct _args *args, void *data, const struct _opt opts[]);
-
+int main_opt_parse(struct _args *args);
 
 #endif
