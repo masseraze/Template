@@ -53,16 +53,23 @@ static const char *short_options = "f:F"; // add needed option here
  */
 #define FORMAT_OPTION \
 	{"format",	no_argument, 0, 'F'},
+/*!
+ * @brief `-h --help` help 
+ */
+#define HELP_OPTION \
+	{"help",	no_argument, 0, 'h'},
 
 static struct option long_options[] = {
 	FILENAME_OPTION
 	FORMAT_OPTION
+	HELP_OPTION
 	{0, 0, 0, 0}
 };
 
 static const struct hint_s hint[] = {
 	{"<filename>", "file to store"},
-	{"", "format"}
+	{"          ", "format"},
+	{NULL, NULL}
 };
 
 

@@ -29,11 +29,6 @@ int extern_opt_par(struct _opt_context *ctx){
                     // fprintf(stderr,"[%s ,%d]\n",__func__,__LINE__);                
                     int *field = (int *)((int)data_tmp + ctx->opt[i].offset);
                     *field = 1;
-                    ctx->argc--; // delete external help
-                    ctx->extopt++; // count the external option
-                    for (int k = j; k < ctx->argc; k++) {
-                        ctx->argv[k] = ctx->argv[k + 1];
-                    }
                     i++;
                     return 0;
                 }
@@ -46,11 +41,6 @@ int extern_opt_par(struct _opt_context *ctx){
 
                     // Get the pointer to the field in the data structure
                     char **field = (char **)((char *)data_tmp + ctx->opt[i].offset);
-
-                    // Free the old string if it exists
-                    if (*field) {
-                        free(*field);
-                    }
 
                     // Duplicate the string
                     *field = strdup(value);
@@ -84,6 +74,41 @@ int _opt_parse(struct _args *args, void *data, const struct _opt opts[]){
     return 0;
 }
 
+void display_help(){
+
+    int max_option_length = 0;
+    for (int i = 0; hint[i].arg != NULL; i++) {
+        int current_length = strlen(long_options[i].name);
+        if (current_length > max_option_length) {
+            max_option_length = current_length;
+        }
+    }
+
+    for (int i = 0; hint[i].arg != NULL; i++) {
+        printf("    -%c, --%-*s ", long_options[i].val, max_option_length, long_options[i].name);
+        
+        // Print the first line of the description
+        const char *description = hint[i].str;
+        const char *newline = strchr(description, '\n');
+        if (newline) {
+            printf("%.*s\n", (int)(newline - description), description);
+            description = newline + 1;
+        } else {
+            printf("%s\n", description);
+            continue;
+        }
+
+        // Handle additional lines in the description
+        while ((newline = strchr(description, '\n')) != NULL) {
+            printf("%*s%.*s\n", max_option_length + 6, "", (int)(newline - description), description);
+            description = newline + 1;
+        }
+        // Print the last line of the description
+        printf("%*s%s\n", max_option_length + 6, "", description);
+    }
+
+}
+
 int main_opt_parse(struct _args *args){
     int opt;
     while ((opt = getopt_long(args->argc, args->argv, short_options, long_options, &option_index)) != -1) {
@@ -94,6 +119,10 @@ int main_opt_parse(struct _args *args){
                 break;
             case 'F':
                 // printf("Option --format\n");
+                break;
+            case 'h':
+                printf("Main internal option:\n");
+                display_help();
                 break;
             default:
                 break;
@@ -108,4 +137,6 @@ int main_opt_parse(struct _args *args){
         }
         putchar('\n');
     }
+    return 0;
 }
+
